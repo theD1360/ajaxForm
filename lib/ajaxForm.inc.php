@@ -267,7 +267,7 @@ ini_set("display_errors", "On");
                     
                         $this->setFilter($field, $value, $message);
                     
-                    }else if(0 == strpos($field, "/")){
+                    }else if(0 == strpos($value, "/")){
                     
                          $this->setRegex($field, $value, $message);
                     
@@ -284,7 +284,18 @@ ini_set("display_errors", "On");
 
 		# Iterate over the requred fields and check if they are populated in the data array
 		# Accept an alternative error message to display here
-		public function validateValues($errorMessage="Some of the entries below could not be validated. Please review the highlighted fields and correct the values.", $successMessage = "Form successfully validated..."){
+		public function validateValues($errorMessage=null, $successMessage = null){
+
+            $this->validate($errorMessage=null, $successMessage = null);
+		    
+		}
+
+        # Changing validateValues to validate 
+        public function validate($errorMessage=null, $successMessage = null){
+
+			$errorMessage = (!empty($errorMessage))?$errorMessage:"Some of the entries below could not be validated. Please review the highlighted fields and correct the values.";
+			$successMessage = (!empty($successMessage))?$successMessage: "Form successfully validated...";
+
 			foreach($this->validate as $v){
 			    $params = $v['map'];
 			    array_unshift(  $params , $this->data[$v['field']] );
@@ -296,8 +307,8 @@ ini_set("display_errors", "On");
 				$this->setMessage($errorMessage);
 		    else
 		        $this->setMessage($successMessage);
-		    
-		}
+        
+        }
 
 
 		# simple clearing functions *not sure if they will be used yet*
